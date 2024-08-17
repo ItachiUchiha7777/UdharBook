@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, StatusBar } from 'react-native';
 import { Button, List } from 'react-native-paper'; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = [
     { id: 1, title: "Rohit", direction: "In", amount: 15, status: 0 },
@@ -58,7 +57,7 @@ export default function HomeScreen({navigation}) {
         icon=""
         style={styles.addButton}
         mode="elevated"
-        onPress={() => navigation.navigate('Details')}
+        onPress={() => navigation.navigate('modal')}
       >
         ADD NEW
       </Button>

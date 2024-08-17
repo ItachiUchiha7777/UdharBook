@@ -3,9 +3,10 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./components/Home"; // Ensure this path is correct
-import DetailsScreen from "./components/Details"; // Define this component
-import OldScreen from "./components/old";
+import HomeScreen from "./components/Home";
+import DetailsScreen from "./components/Details";
+import OldScreen from "./components/Old";
+import ModalScreen from "./components/Modal";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -25,12 +26,18 @@ export default function App() {
             headerTintColor: "black",
             headerTitleStyle: {
               fontWeight: "bold",
-              
             },
           }}
         />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Old" component={OldScreen} />
+        <Stack.Screen
+          name="modal"
+          component={ModalScreen}
+          options={{
+            presentation: 'modal', // This makes the screen appear as a modal
+          }}
+        />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
