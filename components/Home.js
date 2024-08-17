@@ -1,23 +1,65 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, StatusBar } from 'react-native';
-import { Button, List } from 'react-native-paper'; 
+// HomeScreen.js
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, StatusBar, Alert } from 'react-native';
+import { Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const data = [
-    { id: 1, title: "Rohit", direction: "In", amount: 15, status: 0 },
-    { id: 2, title: "Ishan", direction: "Out", amount: 20, status: 1 },
-    { id: 3, title: "Batra", direction: "In", amount: 25, status: 0 },
-    { id: 4, title: "Aditi", direction: "Out", amount: 30, status: 1 },
-    { id: 5, title: "Sahil", direction: "In", amount: 35, status: 0 },
-    { id: 6, title: "Nikita", direction: "Out", amount: 40, status: 1 },
-    { id: 7, title: "Karan", direction: "In", amount: 45, status: 0 },
-    { id: 8, title: "Priya", direction: "Out", amount: 50, status: 1 },
-  ];
+// Key for AsyncStorage
+const DATA_KEY = 'transactions';
+
+// Demo data
+const demoData = [
+  { id: '1', name: "Rohit", direction: "In", amount: 15, status: 0 },
+  { id: '2', name: "Ishan lodu", direction: "Out", amount: 20, status: 1 },
+  { id: '3', name: "Divya R", direction: "In", amount: 25, status: 0 },
+  { id: '4', name: "Ekterina R", direction: "Out", amount: 30, status: 1 },
+  { id: '5', name: "Nihrarika R", direction: "In", amount: 35, status: 0 },
+  { id: '6', name: "Aahana", direction: "Out", amount: 40, status: 1 },
+  { id: '7', name: "Karan", direction: "In", amount: 45, status: 0 },
+  { id: '8', name: "Priya", direction: "Out", amount: 50, status: 1 },
+];
+
+const getDirectionStyle = (direction) => {
+  return direction === 'In' ? styles.in : styles.out;
   
+};
+const initializeDemoData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(DATA_KEY);
+    if (jsonValue == null) {
+      await AsyncStorage.setItem(DATA_KEY, JSON.stringify(demoData));
+    }
+  } catch (e) {
+    console.error('Failed to initialize data:', e);
+  }
+};
 
-export default function HomeScreen({navigation}) {
+const fetchData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(DATA_KEY);
+    return jsonValue != null ? JSON.parse(jsonValue) : [];
+  } catch (e) {
+    console.error('Failed to fetch data:', e);
+    Alert.alert('Error', 'Failed to load data');
+    return [];
+  }
+};
+
+export default function HomeScreen({ navigation }) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      await initializeDemoData(); // Ensure demo data is set
+      const fetchedData = await fetchData();
+      setData(fetchedData);
+    };
+
+    loadData();
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-     
       <View style={styles.buttonContainer}>
         <Button icon="" mode="elevated" onPress={() => console.log("IN Pressed")}>
           IN
@@ -34,30 +76,25 @@ export default function HomeScreen({navigation}) {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.item}
-            onPress={() => alert(`Selected: ${item.title}`)}
+            onPress={() => navigation.navigate('Details', { item })}
           >
             <View style={styles.content}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.detail}>{item.direction}</Text>
-              <Text style={styles.detail}>${item.amount}</Text>
-              {/* <Text style={styles.detail}>
-                Status: {item.status === 0 ? "Pending" : "Completed"}
-              </Text> */}
+              <Text style={styles.title}>{item.name}</Text>
+              <Text style={[styles.detail, getDirectionStyle(item.direction)]}>
+                {item.direction}
+              </Text>
+              <Text style={styles.detail}>₹{item.amount}</Text>
+              {/* <Text style={styles.detail}>{item.status === 0 ? "Pending" : "Completed"}</Text> */}
             </View>
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
       />
-      {/* <List.Item
-        title="First Item"
-        description="Item description"
-        left={(props) => <List.Icon {...props} icon="camera" />}
-      /> */}
       <Button
         icon=""
         style={styles.addButton}
         mode="elevated"
-        onPress={() => navigation.navigate('modal')}
+        onPress={() => navigation.navigate('Add')}
       >
         ADD NEW
       </Button>
@@ -71,7 +108,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -85,6 +121,12 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+  },
+  out:{
+    color:"red"
+  },
+  in:{
+    color:"green"
   },
   content: {
     flexDirection: 'row',

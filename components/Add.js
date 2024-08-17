@@ -3,8 +3,24 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Alert }
 import { TextInput, Checkbox, IconButton, Button } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Contacts from 'react-native-contacts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function ModalScreen({ navigation }) {
+const DATA_KEY = 'transactions';
+
+const saveTransaction = async (transaction) => {
+  try {
+    const existingData = await AsyncStorage.getItem(DATA_KEY);
+    const data = existingData ? JSON.parse(existingData) : [];
+    data.push(transaction);
+    await AsyncStorage.setItem(DATA_KEY, JSON.stringify(data));
+    console.log('Transaction saved successfully');
+  } catch (e) {
+    console.error('Failed to save transaction:', e);
+    Alert.alert('Error', 'Failed to save transaction');
+  }
+};
+
+export default function AddScreen({ navigation }) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState(null);
   const [amount, setAmount] = useState("");
@@ -49,23 +65,51 @@ export default function ModalScreen({ navigation }) {
     setMoneyOutChecked(true);
   };
 
+  const handleSave = async () => {
+    if (!name || !amount || !date) {
+      Alert.alert('Missing Information', 'Please fill out all required fields');
+      return;
+    }
+
+    const transaction = {
+      name,
+      contact,
+      amount: parseFloat(amount),
+      direction: moneyInChecked ? 'Money In' : moneyOutChecked ? 'Money Out' : '',
+      status: 'pending', // Assuming status is 'pending' initially
+      date: date.toISOString(), // Store date as an ISO string
+      description
+    };
+
+    await saveTransaction(transaction);
+
+    // Optionally, reset the form or navigate to another screen
+    setName('');
+    setContact(null);
+    setAmount('');
+    setDescription('');
+    setMoneyInChecked(false);
+    setMoneyOutChecked(false);
+    setDate(new Date());
+
+    Alert.alert('Success', 'Transaction saved successfully');
+    // navigation.goBack(); // Uncomment if you want to go back to the previous screen
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TextInput
+        label="Name"
+        value={name}
+        onChangeText={(text) => setName(text)}
+        style={[styles.input, styles.rounded]}
+      />
       <TouchableOpacity onPress={openContacts} style={styles.input}>
         <View style={styles.inputContent}>
           <IconButton icon="account" size={24} onPress={openContacts} />
           <Text style={styles.label}>{contact || "Select Contact"}</Text>
         </View>
       </TouchableOpacity>
-
-      <TextInput
-        label="Name"
-        
-        value={name}
-        onChangeText={(text) => setName(text)}
-        style={[styles.input, styles.rounded]}
-      />
-
       <View style={styles.checkboxContainer}>
         <Checkbox
           status={moneyInChecked ? "checked" : "unchecked"}
@@ -102,23 +146,22 @@ export default function ModalScreen({ navigation }) {
 
       <TextInput
         label="Amount"
-        
         value={amount}
         onChangeText={(text) => setAmount(text)}
         style={[styles.input, styles.rounded]}
         left={<TextInput.Affix text="₹" />}
+        keyboardType="numeric"
       />
 
       <TextInput
         label="Description"
-        
         value={description}
         onChangeText={(text) => setDescription(text)}
         style={[styles.input, styles.description, styles.rounded]}
         multiline
       />
 
-      <Button mode="contained" style={styles.button} onPress={() => { /* handle save */ }}>
+      <Button mode="contained" style={styles.button} onPress={handleSave}>
         Save
       </Button>
     </ScrollView>

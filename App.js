@@ -6,7 +6,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./components/Home";
 import DetailsScreen from "./components/Details";
 import OldScreen from "./components/Old";
-import ModalScreen from "./components/Modal";
+// import ModalScreen from "./components/Modal";
+import AddScreen from "./components/Add";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -32,8 +33,8 @@ export default function App() {
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Old" component={OldScreen} />
         <Stack.Screen
-          name="modal"
-          component={ModalScreen}
+          name="Add"
+          component={AddScreen}
           options={{
             presentation: 'modal', // This makes the screen appear as a modal
           }}
