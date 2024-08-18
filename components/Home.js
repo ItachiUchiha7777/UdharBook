@@ -10,7 +10,7 @@ const DATA_KEY = 'transactions';
 // Demo data
 const demoData = [
   { id: '1', name: "Rohit", direction: "In", amount: 15, status: 0 },
-  { id: '2', name: "Ishan lodu", direction: "Out", amount: 20, status: 1 },
+  { id: '2', name: "Ishan Chaudhary", direction: "Out", amount: 20, status: 1 },
   { id: '3', name: "Divya R", direction: "In", amount: 25, status: 0 },
   { id: '4', name: "Ekterina R", direction: "Out", amount: 30, status: 1 },
   { id: '5', name: "Nihrarika R", direction: "In", amount: 35, status: 0 },
