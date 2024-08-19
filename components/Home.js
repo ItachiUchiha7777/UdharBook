@@ -26,6 +26,7 @@ const getDirectionStyle = (direction) => {
 const initializeDemoData = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem(DATA_KEY);
+    
     if (jsonValue == null) {
       await AsyncStorage.setItem(DATA_KEY, JSON.stringify(demoData));
     }
@@ -80,10 +81,13 @@ export default function HomeScreen({ navigation }) {
           >
             <View style={styles.content}>
               <Text style={styles.title}>{item.name}</Text>
+             
+              <View>
+              <Text style={styles.detail}>₹{item.amount}</Text>
               <Text style={[styles.detail, getDirectionStyle(item.direction)]}>
                 {item.direction}
               </Text>
-              <Text style={styles.detail}>₹{item.amount}</Text>
+              </View>
               {/* <Text style={styles.detail}>{item.status === 0 ? "Pending" : "Completed"}</Text> */}
             </View>
           </TouchableOpacity>
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     width: "100%",
     maxWidth: 600,
     margin: 5,
@@ -131,6 +135,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignContent:'center'
   },
   title: {
     fontSize: 18,
