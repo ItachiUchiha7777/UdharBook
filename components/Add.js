@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Alert } from "react-native";
 import { TextInput, Checkbox, IconButton, Button } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Contacts from 'react-native-contacts';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DATA_KEY = 'transactions';
@@ -13,6 +13,7 @@ const saveTransaction = async (transaction) => {
     const data = existingData ? JSON.parse(existingData) : [];
     data.push(transaction);
     await AsyncStorage.setItem(DATA_KEY, JSON.stringify(data));
+    console.log(data);
     console.log('Transaction saved successfully');
   } catch (e) {
     console.error('Failed to save transaction:', e);
@@ -30,7 +31,6 @@ export default function AddScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(Platform.OS === 'ios');
     if (selectedDate) {
@@ -43,16 +43,18 @@ export default function AddScreen({ navigation }) {
       const permission = await Contacts.requestPermission();
       if (permission === 'authorized') {
         Contacts.getAll().then(contacts => {
-          // For simplicity, assuming the first contact is selected.
           if (contacts.length > 0) {
+            // Show a list of contacts or choose the first one
             setContact(contacts[0].displayName);
+          } else {
+            Alert.alert('No Contacts', 'No contacts found.');
           }
         });
       } else {
-        Alert.alert("Permission denied", "Unable to access contacts");
+        Alert.alert("Permission Denied", "Unable to access contacts");
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to load contacts");
+      Alert.alert("Error", `Failed to load contacts: ${error.message}`);
     }
   };
 
@@ -77,14 +79,13 @@ export default function AddScreen({ navigation }) {
       contact,
       amount: parseFloat(amount),
       direction: moneyInChecked ? 'Money In' : moneyOutChecked ? 'Money Out' : '',
-      status: 'pending', // Assuming status is 'pending' initially
-      date: date.toISOString(), // Store date as an ISO string
+      status: 'pending',
+      date: date.toISOString(),
       description
     };
 
     await saveTransaction(transaction);
 
-    // Optionally, reset the form or navigate to another screen
     setName('');
     setContact(null);
     setAmount('');
@@ -94,7 +95,7 @@ export default function AddScreen({ navigation }) {
     setDate(new Date());
 
     Alert.alert('Success', 'Transaction saved successfully');
-    // navigation.goBack(); // Uncomment if you want to go back to the previous screen
+    navigation.goBack();
   };
 
   return (
@@ -102,7 +103,7 @@ export default function AddScreen({ navigation }) {
       <TextInput
         label="Name"
         value={name}
-        onChangeText={(text) => setName(text)}
+        onChangeText={setName}
         style={[styles.input, styles.rounded]}
       />
       <TouchableOpacity onPress={openContacts} style={styles.input}>
@@ -119,7 +120,6 @@ export default function AddScreen({ navigation }) {
         />
         <Text style={styles.checkboxLabel}>Money In</Text>
       </View>
-
       <View style={styles.checkboxContainer}>
         <Checkbox
           status={moneyOutChecked ? "checked" : "unchecked"}
@@ -128,14 +128,12 @@ export default function AddScreen({ navigation }) {
         />
         <Text style={styles.checkboxLabel}>Money Out</Text>
       </View>
-
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
         <View style={styles.inputContent}>
           <IconButton icon="calendar" size={24} onPress={() => setShowDatePicker(true)} />
           <Text style={styles.label}>{date.toDateString()}</Text>
         </View>
       </TouchableOpacity>
-
       {showDatePicker && (
         <DateTimePicker
           value={date}
@@ -144,24 +142,21 @@ export default function AddScreen({ navigation }) {
           onChange={handleDateChange}
         />
       )}
-
       <TextInput
         label="Amount"
         value={amount}
-        onChangeText={(text) => setAmount(text)}
+        onChangeText={setAmount}
         style={[styles.input, styles.rounded]}
         left={<TextInput.Affix text="₹" />}
         keyboardType="numeric"
       />
-
       <TextInput
         label="Description"
         value={description}
-        onChangeText={(text) => setDescription(text)}
+        onChangeText={setDescription}
         style={[styles.input, styles.description, styles.rounded]}
         multiline
       />
-
       <Button mode="contained" style={styles.button} onPress={handleSave}>
         Save
       </Button>

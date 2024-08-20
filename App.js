@@ -6,6 +6,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./components/Home";
 import DetailsScreen from "./components/Details";
 import OldScreen from "./components/Old";
+import  InScreen  from "./components/In";
+import OutScreen from "./components/Out";
 // import ModalScreen from "./components/Modal";
 import AddScreen from "./components/Add";
 const Stack = createStackNavigator();
@@ -32,6 +34,9 @@ export default function App() {
         />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Old" component={OldScreen} />
+        <Stack.Screen name="In" component={InScreen} />
+        <Stack.Screen name="Out" component={OutScreen} />
+
         <Stack.Screen
           name="Add"
           component={AddScreen}
