@@ -12,6 +12,8 @@ export default function DetailScreen({ route, navigation }) {
         Direction: {item.direction}
       </Text>
       <Text style={styles.detail}>Amount: ₹{item.amount}</Text>
+      
+
       <Text style={styles.detail}>
         Status: {item.status === 0 ? 'Pending' : 'Completed'}
       </Text>

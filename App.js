@@ -34,14 +34,23 @@ export default function App() {
         />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Old" component={OldScreen} />
-        <Stack.Screen name="In" component={InScreen} />
+          <Stack.Screen
+          name="Credit/In"
+          component={InScreen}
+          // options={{ headerShown: false }} 
+        />
         <Stack.Screen name="Out" component={OutScreen} />
 
         <Stack.Screen
           name="Add"
           component={AddScreen}
           options={{
-            presentation: 'modal', // This makes the screen appear as a modal
+            presentation: 'modal', // Makes the screen appear as a modal
+            // Header styles for the 'Add' screen only
+            headerStyle: {
+              backgroundColor: '#faf1f8', // Set the background color for the header
+            },
+            headerTintColor: '#333', // Set the color of header text here (optional)
           }}
         />
       </Stack.Navigator>
