@@ -1,8 +1,8 @@
+// AddScreen.js
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Alert } from "react-native";
 import { TextInput, Checkbox, IconButton, Button } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import * as Contacts from 'expo-contacts'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DATA_KEY = 'transactions';
@@ -18,7 +18,6 @@ const saveTransaction = async (transaction) => {
     console.error('Failed to save transaction:', e);
     Alert.alert('Error', 'Failed to save transaction');
   }
-
 };
 
 export default function AddScreen({ navigation }) {
@@ -39,42 +38,8 @@ export default function AddScreen({ navigation }) {
     }
   };
 
-  const openContacts = async () => {
-    try {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === 'granted') {
-        const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.PhoneNumbers],
-        });
-
-        console.log('Contacts data:', data); // Log data to verify structure
-
-        if (data && Array.isArray(data) && data.length > 0) {
-          const contactList = data.map(contact => ({
-            name: contact.name,
-            phoneNumbers: contact.phoneNumbers.map(phone => phone.number),
-          }));
-
-          Alert.alert(
-            'Select a Contact',
-            'Choose a contact from the list',
-            contactList.map(contact => ({
-              text: contact.name,
-              onPress: () => {
-                setContact(contact.name);
-                setPhoneNumber(contact.phoneNumbers[0] || 'No phone number');
-              },
-            })).concat([{ text: 'Cancel', style: 'cancel' }])
-          );
-        } else {
-          Alert.alert('No Contacts', 'No contacts found.');
-        }
-      } else {
-        Alert.alert("Permission Denied", "Unable to access contacts");
-      }
-    } catch (error) {
-      Alert.alert("Error", `Failed to load contacts: ${error.message}`);
-    }
+  const openContacts = () => {
+    navigation.navigate('Contacts', { setContact, setPhoneNumber });
   };
 
   const toggleMoneyIn = () => {
@@ -95,7 +60,6 @@ export default function AddScreen({ navigation }) {
 
     const transaction = {
       name,
-      // contact,
       phoneNumber,
       amount: parseFloat(amount),
       direction: moneyInChecked ? 'In' : moneyOutChecked ? 'Out' : '',
@@ -128,7 +92,7 @@ export default function AddScreen({ navigation }) {
           onChangeText={setName}
           style={[styles.input, styles.rounded]}
         />
-        {/* <TouchableOpacity onPress={openContacts} style={styles.input}>
+        <TouchableOpacity onPress={openContacts} style={styles.input}>
           <View style={styles.inputContent}>
             <IconButton icon="account" size={24} />
             <View style={styles.contactInfo}>
@@ -136,7 +100,7 @@ export default function AddScreen({ navigation }) {
               <Text style={styles.label}>{phoneNumber || ""}</Text>
             </View>
           </View>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <View style={styles.checkboxContainer}>
           <Checkbox
             status={moneyInChecked ? "checked" : "unchecked"}
@@ -184,9 +148,9 @@ export default function AddScreen({ navigation }) {
         />
       </View>
       <TouchableOpacity onPress={handleSave}>
-      <Button mode="contained" style={styles.button} >
-        Save
-      </Button>
+        <Button mode="contained" style={styles.button} >
+          Save
+        </Button>
       </TouchableOpacity>
     </ScrollView>
   );

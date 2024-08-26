@@ -6,7 +6,7 @@ export default function OldScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Details Screen</Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <Button title="Go back" onPress={() => navigation.navigate("Contacts")} />
     </View>
   );
 }
