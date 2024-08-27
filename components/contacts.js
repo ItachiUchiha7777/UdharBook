@@ -1,4 +1,4 @@
-// ContactScreen.js
+// ContactScreen.js this is a modal file
 import React, { useState, useEffect } from 'react';
 import { View, Text,  StyleSheet, Dimensions, FlatList, TouchableOpacity, Alert } from 'react-native';
 import * as Contacts from 'expo-contacts';
