@@ -51,7 +51,8 @@ const ContactScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { height: height * .97 }]}>
+    // modal height
+    <View style={[styles.container, { height: height * .97 }]}> 
       <FlatList
         data={contacts}
         keyExtractor={(item) => item.id}
