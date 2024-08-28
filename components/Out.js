@@ -37,7 +37,7 @@ const InScreen = ({ navigation }) => {
         <Button icon="" mode="elevated" onPress={() => navigation.navigate('Credit/In')}>
           IN
         </Button>
-        <Button icon="" mode="elevated" onPress={() => navigation.navigate('Out')}>
+        <Button icon="" mode="elevated" style={styles.outButton} onPress={() => navigation.navigate('Out')}>
           OUT
         </Button>
         <Button icon="" mode="elevated" onPress={() => navigation.navigate('Old')}>
@@ -89,6 +89,11 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     margin: 5,
 
+  },
+  outButton:{
+    
+      backgroundColor: '#b08cb8',
+    
   },
   item: {
     backgroundColor: '#fff',

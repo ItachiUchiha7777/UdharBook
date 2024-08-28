@@ -34,7 +34,7 @@ const InScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button icon="" mode="elevated" onPress={() => navigation.navigate('Credit/In')}>
+        <Button style={styles.inButton} icon="" mode="elevated" onPress={() => navigation.navigate('Credit/In')}>
           IN
         </Button>
         <Button icon="" mode="elevated" onPress={() => navigation.navigate('Out')}>
@@ -81,6 +81,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  inButton:{
+    backgroundColor: '#b08cb8',
   },
   buttonContainer: {
     flexDirection: "row",

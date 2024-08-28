@@ -1,8 +1,8 @@
 // ContactScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Dimensions, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text,  StyleSheet, Dimensions, FlatList, TouchableOpacity, Alert } from 'react-native';
 import * as Contacts from 'expo-contacts';
-
+import { Button } from 'react-native-paper';
 const { height } = Dimensions.get('window');
 
 const ContactScreen = ({ route, navigation }) => {
@@ -51,7 +51,7 @@ const ContactScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { height: height * .9 }]}>
+    <View style={[styles.container, { height: height * .97 }]}>
       <FlatList
         data={contacts}
         keyExtractor={(item) => item.id}
@@ -66,10 +66,16 @@ const ContactScreen = ({ route, navigation }) => {
         )}
         ListEmptyComponent={<Text style={styles.emptyMessage}>No Contacts Available</Text>}
       />
+    
       <Button
-        title="Close"
+        icon=""
+        style={styles.closeButton}
+        mode="elevated"
         onPress={() => navigation.goBack()}
-      />
+
+      >
+        ADD NEW
+      </Button>
     </View>
   );
 };
@@ -79,15 +85,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20,
     justifyContent: 'flex-start',
     alignItems: 'center',
     position: 'absolute',
     bottom: 0,
     width: '100%',
+  },closeButton:{
+    width:"100%",
+    padding:"2.5%"
   },
   contactItem: {
-    padding: 10,
+    padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     width: '100%',

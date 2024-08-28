@@ -1,7 +1,7 @@
 // DetailScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-
+import { View, Text, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 export default function DetailScreen({ route, navigation }) {
   const { item } = route.params;
 
@@ -12,12 +12,23 @@ export default function DetailScreen({ route, navigation }) {
         Direction: {item.direction}
       </Text>
       <Text style={styles.detail}>Amount: ₹{item.amount}</Text>
+      <Text style={styles.detail}>Date: {item.date}</Text>
+
+      <Text style={styles.detail}>Details: {item.description}</Text>
+
       
 
       <Text style={styles.detail}>
         Status: {item.status === 0 ? 'Pending' : 'Completed'}
       </Text>
-      <Button title="Go Back" onPress={() => navigation.goBack()} />
+      <Button
+        icon=""
+        style={styles.completeButton}
+        mode="elevated"
+        onPress={() => navigation.navigate('Add')}
+      >
+       Complete
+      </Button>
     </View>
   );
 }
@@ -32,6 +43,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+  },completeButton:{
+    marginTop:450,
+    padding:20
   },
   detail: {
     fontSize: 18,

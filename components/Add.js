@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   description: {
-    height: 100,
+    height: 150,
   },
   rounded: {
     borderRadius: 10,
@@ -203,6 +203,5 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: 'center',
     marginTop: 16,
-    top:170
   },
 });

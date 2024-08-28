@@ -8,14 +8,14 @@ const DATA_KEY = 'transactions';
 
 // Demo data
 const demoData = [
-  { id: '1', name: "Rohit", direction: "In", amount: 15, status: 0 },
+  { id: '1', name: "Rohit Gusain", direction: "In", amount: 15, status: 0, },
   { id: '2', name: "Ishan Chaudhary", direction: "Out", amount: 20, status: 1 },
-  { id: '3', name: "Bheem", direction: "In", amount: 25, status: 0 },
-  { id: '4', name: "Timothy", direction: "Out", amount: 30, status: 1 },
-  { id: '5', name: "Mauro", direction: "In", amount: 35, status: 0 },
-  { id: '6', name: "karn", direction: "Out", amount: 40, status: 1 },
-  { id: '7', name: "Aman", direction: "In", amount: 45, status: 0 },
-  { id: '8', name: "Priya", direction: "Out", amount: 50, status: 1 },
+  { id: '3', name: "Vansh Batra", direction: "In", amount: 25, status: 0 },
+  { id: '4', name: "Shivam Negi", direction: "Out", amount: 30, status: 1 },
+  { id: '5', name: "Mauro Argentina", direction: "In", amount: 35, status: 0 },
+  { id: '6', name: "Bheem Rawat", direction: "Out", amount: 40, status: 1 },
+  { id: '7', name: "Aman Aswal", direction: "In", amount: 45, status: 0 },
+  { id: '8', name: "Priya Rawat", direction: "Out", amount: 50, status: 1 },
 ];
 
 const getDirectionStyle = (direction) => {
@@ -24,9 +24,13 @@ const getDirectionStyle = (direction) => {
 
 const initializeDemoData = async () => {
   try {
+    AsyncStorage.clear()
+   
+    
     const jsonValue = await AsyncStorage.getItem(DATA_KEY);
     
     if (jsonValue == null) {
+
       await AsyncStorage.setItem(DATA_KEY, JSON.stringify(demoData));
     }
   } catch (e) {
@@ -36,6 +40,7 @@ const initializeDemoData = async () => {
 
 const fetchData = async () => {
   try {
+
     const jsonValue = await AsyncStorage.getItem(DATA_KEY);
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (e) {
