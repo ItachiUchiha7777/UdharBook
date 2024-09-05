@@ -9,7 +9,7 @@ import DetailsScreen from "./components/Details";
 import OldScreen from "./components/Old";
 import InScreen from "./components/In";
 import OutScreen from "./components/Out";
-// import ModalScreen from "./components/Modal";
+import AuthScreen from "./components/AuthScreen";
 import AddScreen from "./components/Add";
 const Stack = createStackNavigator();
 
@@ -17,6 +17,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Auth" component={AuthScreen} />
+      <Stack.Screen name="Google" component={GoogleAuth} />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
