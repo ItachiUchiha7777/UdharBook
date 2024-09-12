@@ -3,6 +3,7 @@ import { makeRedirectUri } from 'expo-auth-session';
 import { firebase } from './firebaseConfig';
 import { useEffect } from 'react';
 import { View, Button } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 export default function GoogleAuth() {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -22,6 +23,13 @@ export default function GoogleAuth() {
 
   return (
     <View>
+      <TextInput
+          label="email"
+          value={email}
+          onChangeText={setDescription}
+          style={[styles.input, styles.description, styles.rounded]}
+          multiline
+        />
       <Button title="Sign in with Google" disabled={!request} onPress={() => promptAsync()} />
     </View>
   );
